@@ -17,33 +17,32 @@ class MyWindow(QMainWindow):
             self.setWindowTitle(title)
 
         if information.get('button') is not None:
-            self.button()
+            self.button(information['button'])
 
         if information.get('text_field') is not None:
-            self.text_field()
+            self.text_field(information['text_field'])
 
         if information.get('create_button_list') is not None:
             self.create_button_list(information['create_button_list'])  # -> element
 
         self.show()
 
-    def button(self):
+    def button(self, elements: list):
         button = QPushButton('CLICK!', self)
-        button.setGeometry(300, 300, 100, 50)
+        button.setGeometry(*elements)
         button.clicked.connect(self.on_click)
 
     def create_button_list(self, items):
         self.list_widget = QListWidget(self)
-        self.list_widget.move(100, 50)
-        self.list_widget.resize(200, 150)
+        self.list_widget.setGeometry(*items[1])
 
         for item in items[0]:
             list_item = QListWidgetItem(item)
             self.list_widget.addItem(list_item)
 
-    def text_field(self):
+    def text_field(self, elements: list):
         self.textfield = QLineEdit(self)
-        self.textfield.setGeometry(100, 310, 200, 30)
+        self.textfield.setGeometry(*elements)
 
     def on_click(self):
         if information['text_field'] is not None:
@@ -55,9 +54,9 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     information = {
         'info': [400, 400, 'Window'],  # -> [width, height, title]
-        'create_button_list': [['a', 'b', 'c'], []],  # -> [[elements], [setGeometry]]
-        'button': True,  # ->  [[setGeometry], title, ]
-        'text_field': True  # -> [[setGeometry], ]
+        'create_button_list': [['a', 'b', 'c'], [100, 50, 200, 150]],  # -> [[elements], [setGeometry]]
+        'button': [300, 300, 100, 50],  # ->  [[setGeometry], title, ]
+        'text_field': [100, 310, 200, 30]  # -> [[setGeometry], ]
     }
     window = MyWindow(information)
     sys.exit(app.exec_())
